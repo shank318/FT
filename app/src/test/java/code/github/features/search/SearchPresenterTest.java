@@ -13,6 +13,7 @@ import java.util.List;
 import code.github.RxSchedulersOverrideRule;
 import code.github.pojo.Repository;
 import code.github.networking.ConnectivityInterceptor;
+import code.github.pojo.SearchResult;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 import rx.schedulers.TestScheduler;
@@ -59,7 +60,21 @@ public class SearchPresenterTest {
         when(mockedRepository.fetchUserRepos()).thenReturn(responseObservable);
         presenter.getUserRepositories();
         testScheduler.triggerActions();
-        verify(mockedView).showDialog();
+        verify(presenter.getView()).showDialog();
+    }
+
+    @Test
+    public void searchTest() {
+        TestScheduler testScheduler = new TestScheduler();
+        TestSubscriber<SearchResult> testSubscriber = new TestSubscriber<>();
+        SearchResult searchResult = new SearchResult();
+        searchResult.setRepositories(repositories);
+        Observable<SearchResult> responseObservable = Observable.just(searchResult).subscribeOn(testScheduler);
+        responseObservable.subscribe(testSubscriber);
+        when(mockedRepository.fetchSearchData("wifi")).thenReturn(responseObservable);
+        presenter.search("wifi");
+        testScheduler.triggerActions();
+        verify(presenter.getView()).showDialog();
     }
 
 
