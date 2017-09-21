@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import code.github.di.ApplicationComponent;
-import code.github.features.LoginActivity;
+import code.github.features.login.LoginActivity;
 
 /**
  * Created by shank on 06/09/17.

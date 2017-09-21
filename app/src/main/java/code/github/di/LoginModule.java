@@ -2,9 +2,8 @@ package code.github.di;
 
 import android.content.Context;
 
-import code.github.base.MyApplication;
 import code.github.constants.Constants;
-import code.github.networking.githubauth.GithubApp;
+import code.github.networking.githubauth.GitHubApp;
 import dagger.Module;
 import dagger.Provides;
 
@@ -21,8 +20,8 @@ public class LoginModule {
     }
 
     @Provides
-    public GithubApp providesGitHub(){
-        return new GithubApp(context, Constants.CLIENT_ID,Constants.CLIENT_SECRET,Constants.CALLBACK_URL);
+    public GitHubApp providesGitHub(){
+        return new GitHubApp(context, Constants.CLIENT_ID,Constants.CLIENT_SECRET,Constants.CALLBACK_URL);
     }
 
 }

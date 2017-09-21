@@ -1,5 +1,6 @@
 package code.github.features.search;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.net.UnknownHostException;
@@ -29,7 +30,7 @@ public class Presenter extends BasePresenter<IUiView> {
     }
 
     public void search(String query) {
-            getView().showDialog();
+            getViewOrThrow().showDialog();
             addSubscription(service.fetchSearchData(query)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.computation())
@@ -44,12 +45,21 @@ public class Presenter extends BasePresenter<IUiView> {
 
     }
 
+    @NonNull
+    public IUiView getViewOrThrow() {
+        final IUiView view = getView();
+        if (view == null) {
+            throw new IllegalStateException("view not attached");
+        }
+        return view;
+    }
+
     public void getUserRepositories() {
         // Show dialoge only if there is no cache
         if(service.checkIfRepoExists()){
-            getView().onDataReceived(service.readAllReopsFromRealm());
+            getViewOrThrow().onDataReceived(service.readAllReopsFromRealm());
         }else{
-        getView().showDialog();
+            getViewOrThrow().showDialog();
         addSubscription(service.fetchUserRepos()
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
@@ -61,18 +71,18 @@ public class Presenter extends BasePresenter<IUiView> {
 
 
     void onSuccess(List<Repository> reops) {
-        getView().hideDialog();
-        getView().onDataReceived(reops);
+        getViewOrThrow().hideDialog();
+        getViewOrThrow().onDataReceived(reops);
     }
 
     void onLoadFailure(Throwable throwable) {
-        getView().hideDialog();
+        getViewOrThrow().hideDialog();
         if(throwable instanceof ConnectivityInterceptor.NoConnectivityException
                 || throwable instanceof UnknownHostException){
             // No internet connection
-            getView().showNoInternetError(throwable);
+            getViewOrThrow().showNoInternetError(throwable);
         }else{
-            getView().showErrorMessage(throwable);
+            getViewOrThrow().showErrorMessage(throwable);
         }
     }
 

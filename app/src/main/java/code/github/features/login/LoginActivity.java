@@ -1,9 +1,7 @@
-package code.github.features;
+package code.github.features.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -11,48 +9,40 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import code.github.R;
 import code.github.base.BaseActivity;
-import code.github.base.MyApplication;
-import code.github.constants.Constants;
 import code.github.di.DaggerLoginComponent;
-import code.github.di.DaggerMainComponent;
 import code.github.di.LoginComponent;
 import code.github.di.LoginModule;
-import code.github.di.MainModule;
 import code.github.features.search.SearchActivity;
-import code.github.networking.githubauth.GithubApp;
-import code.github.utils.Logger;
-import code.github.utils.ViewUtil;
+import code.github.networking.githubauth.GitHubApp;
 
 /**
  * Created by shank on 9/21/17.
  */
 
-public class LoginActivity extends BaseActivity  {
+public class LoginActivity extends BaseActivity implements ILoginView  {
 
     @Inject
-    GithubApp app;
-
+    GitHubApp app;
+    LoginPresenter loginPresenter;
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        // Build dagger dev
         LoginComponent component = DaggerLoginComponent.builder()
                 .loginModule(new LoginModule(this)).build();
         component.inject(this);
-        if (app.hasAccessToken()) {
+        loginPresenter = new LoginPresenter(app);
+        loginPresenter.attachView(this);
+        if (loginPresenter.isUserLoggedIn()) {
             startSearchActivity();
         }
     }
 
     @OnClick(R.id.login)
     protected void onLogin(){
-        app.setListener(listener);
-        if (app.hasAccessToken()) {
-            startSearchActivity();
-        } else {
-            app.authorize();
-        }
+        loginPresenter.initLogin();
     }
 
     void startSearchActivity(){
@@ -64,21 +54,22 @@ public class LoginActivity extends BaseActivity  {
     @Override
     protected void onPause() {
         super.onPause();
-        app.dismissDialog();
+       loginPresenter.dismissDialog();
     }
 
-    private GithubApp.OAuthAuthenticationListener listener = new GithubApp.OAuthAuthenticationListener() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        loginPresenter.detachView();
+    }
 
-        @Override
-        public void onSuccess() {
-            Logger.debug("Connected as " + app.getUserName());
-            startSearchActivity();
-        }
+    @Override
+    public void onError(String error) {
+        showToast(error);
+    }
 
-        @Override
-        public void onFail(String error) {
-            showToast(error);
-        }
-    };
-
+    @Override
+    public void onLoginSuccess() {
+        startSearchActivity();
+    }
 }

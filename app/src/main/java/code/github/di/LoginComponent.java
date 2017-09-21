@@ -1,6 +1,6 @@
 package code.github.di;
 
-import code.github.features.LoginActivity;
+import code.github.features.login.LoginActivity;
 import dagger.Component;
 
 /**

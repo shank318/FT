@@ -102,7 +102,7 @@ public class GithubDialog extends Dialog {
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
 			Log.d(TAG, "Redirecting URL " + url);
 
-			if (url.startsWith(GithubApp.mCallbackUrl)) {
+			if (url.startsWith(GitHubApp.mCallbackUrl)) {
 				String urls[] = url.split("=");
 				mListener.onComplete(urls[1]);
 				GithubDialog.this.dismiss();

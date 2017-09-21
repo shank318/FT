@@ -23,7 +23,7 @@ import android.util.Log;
 /**
  * Created by shank on 9/21/17.
  */
-public class GithubApp {
+public class GitHubApp {
 	private GithubSession mSession;
 	private GithubDialog mDialog;
 	private OAuthAuthenticationListener mListener;
@@ -44,8 +44,8 @@ public class GithubApp {
 
 	private static final String TAG = "GitHubAPI";
 
-	public GithubApp(Context context,String clientId, String clientSecret,
-			String callbackUrl) {
+	public GitHubApp(Context context, String clientId, String clientSecret,
+                     String callbackUrl) {
 		mSession = new GithubSession(context);
 		mAccessToken = mSession.getAccessToken();
 		mCallbackUrl = callbackUrl;
