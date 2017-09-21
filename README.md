@@ -19,4 +19,8 @@
 
 ### TODO:-
 
-1. There is no official SDK/library for GitHub Authentication in Android. I have found some code for Github auth and customised some parts( folder name - githubauth). The code can be improved. 
+There is no official SDK/library for GitHub Authentication in Android. I have found some code for Github auth and customised some parts( folder name - githubauth). The code can be improved. 
+
+### TESTING:-
+
+Unit/Integrations tests are given. 
