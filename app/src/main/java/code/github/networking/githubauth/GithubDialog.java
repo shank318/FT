@@ -126,7 +126,7 @@ public class GithubDialog extends Dialog {
 			Log.d(TAG, "Loading URL: " + url);
 
 			super.onPageStarted(view, url, favicon);
-			mSpinner.show();
+			if(mSpinner!=null)mSpinner.show();
 		}
 
 		@Override
@@ -136,14 +136,23 @@ public class GithubDialog extends Dialog {
 			if (title != null && title.length() > 0) {
 				mTitle.setText(title);
 			}
-			mSpinner.dismiss();
+			if(mSpinner!=null)mSpinner.dismiss();
 		}
 
 	}
 
+
+	public void dismissDialog() {
+		GithubDialog.this.dismiss();
+		if(mSpinner!=null && mSpinner.isShowing()){
+			mSpinner.dismiss();
+		}
+		mSpinner=null;
+	}
+
 	public interface OAuthDialogListener {
-		public abstract void onComplete(String accessToken);
-		public abstract void onError(String error);
+		 void onComplete(String accessToken);
+		 void onError(String error);
 	}
 
 }

@@ -1,6 +1,8 @@
 package code.github.di;
 
 import code.github.base.MyApplication;
+import code.github.features.search.SearchActivity;
+import code.github.networking.githubauth.GithubSession;
 import dagger.Component;
 import retrofit2.Retrofit;
 

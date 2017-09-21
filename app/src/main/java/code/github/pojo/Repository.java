@@ -4,9 +4,13 @@ package code.github.pojo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Item {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class Repository extends RealmObject {
 
     @SerializedName("id")
+    @PrimaryKey
     private Integer id;
     @SerializedName("name")
     private String name;
@@ -20,6 +24,17 @@ public class Item {
     private String description;
     @SerializedName("language")
     private String language;
+
+    public String getStargazersCount() {
+        return stargazersCount;
+    }
+
+    public void setStargazersCount(String stargazersCount) {
+        this.stargazersCount = stargazersCount;
+    }
+
+    @SerializedName("stargazers_count")
+    private String stargazersCount;
 
 
     public Integer getId() {

@@ -1,10 +1,12 @@
 package code.github.base;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
 
 import code.github.di.ApplicationComponent;
+import code.github.features.LoginActivity;
 
 /**
  * Created by shank on 06/09/17.
@@ -30,5 +32,11 @@ public class BaseActivity extends AppCompatActivity {
 
     protected boolean isTextEmpty(String string){
         return TextUtils.isEmpty(string);
+    }
+
+    public void showLoginScreen(){
+        Intent i= new Intent(this, LoginActivity.class);
+        startActivity(i);
+        finish();
     }
 }

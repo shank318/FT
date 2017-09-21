@@ -2,7 +2,7 @@
 package code.github.pojo;
 
 import java.util.List;
-import com.google.gson.annotations.Expose;
+
 import com.google.gson.annotations.SerializedName;
 
 public class SearchResult {
@@ -12,7 +12,7 @@ public class SearchResult {
     @SerializedName("incomplete_results")
     private Boolean incompleteResults;
     @SerializedName("items")
-    private List<Item> items = null;
+    private List<Repository> repositories = null;
 
     public Integer getTotalCount() {
         return totalCount;
@@ -30,12 +30,12 @@ public class SearchResult {
         this.incompleteResults = incompleteResults;
     }
 
-    public List<Item> getItems() {
-        return items;
+    public List<Repository> getRepositories() {
+        return repositories;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
+    public void setRepositories(List<Repository> repositories) {
+        this.repositories = repositories;
     }
 
 }

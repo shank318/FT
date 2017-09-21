@@ -2,8 +2,8 @@ package code.github.features.search;
 
 import java.util.List;
 
-import code.github.pojo.FilmLocation;
-import code.github.pojo.Item;
+import code.github.pojo.Repository;
+import code.github.pojo.SearchResult;
 
 /**
  * Created by shank on 06/09/17.
@@ -12,8 +12,7 @@ import code.github.pojo.Item;
 public interface IUiView {
     void showErrorMessage(Throwable throwable);
 
-    void onDataReceived(List<Item> searchItems);
-
+    void onDataReceived(List<Repository> searchRepositories);
     void hideDialog();
 
     void showDialog();

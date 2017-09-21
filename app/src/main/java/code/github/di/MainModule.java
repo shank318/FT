@@ -1,7 +1,7 @@
 package code.github.di;
 
 import code.github.features.search.Service;
-import code.github.networking.GetSearchDataApi;
+import code.github.networking.GitHubAPI;
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
@@ -14,12 +14,12 @@ import retrofit2.Retrofit;
 public class MainModule {
 
     @Provides
-    public Service providesService(GetSearchDataApi getSearchDataApi){
-        return new Service(getSearchDataApi);
+    public Service providesService(GitHubAPI gitHubAPI){
+        return new Service(gitHubAPI);
     }
 
     @Provides
-    public GetSearchDataApi providesApi(Retrofit retrofit){
-        return retrofit.create(GetSearchDataApi.class);
+    public GitHubAPI providesApi(Retrofit retrofit){
+        return retrofit.create(GitHubAPI.class);
     }
 }

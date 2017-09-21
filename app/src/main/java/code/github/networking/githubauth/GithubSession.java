@@ -66,7 +66,7 @@ public class GithubSession {
 	 * @return Access token
 	 */
 	public String getAccessToken() {
-		return sharedPref.getString(API_ID, null);
+		return sharedPref.getString(API_ACCESS_TOKEN, null);
 	}
 
 }

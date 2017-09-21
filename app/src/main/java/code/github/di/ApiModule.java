@@ -1,12 +1,18 @@
 package code.github.di;
 
+import android.content.Context;
+
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 
+import javax.inject.Singleton;
+
 import code.github.base.MyApplication;
 import code.github.networking.ConnectivityInterceptor;
+import code.github.networking.githubauth.GithubSession;
+import code.github.utils.Logger;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Interceptor;
@@ -23,8 +29,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class ApiModule {
     private String baseUrl;
-    public ApiModule(String baseUrl){
+    private Context context;
+    public ApiModule(String baseUrl, Context context){
         this.baseUrl = baseUrl;
+        this.context = context;
     }
 
     @Provides
@@ -34,25 +42,21 @@ public class ApiModule {
 
     @Provides
     public Retrofit providesRetrofit(){
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request newRequest  = chain.request().newBuilder()
-                        .addHeader("Authorization", "token " + token)
-                        .addHeader("Accept", "application/vnd.github.mercy-preview+json")
-                        .build();
-                return chain.proceed(newRequest);
-            }
-        }).addInterceptor(new ConnectivityInterceptor(MyApplication.getInstance()))
-                .addNetworkInterceptor(new StethoInterceptor()).build();
-
-
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new ConnectivityInterceptor(MyApplication.getInstance()))
+                .addNetworkInterceptor(new StethoInterceptor())
+                .build();
         return new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(baseUrl)
                 .client(client)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
+    }
+
+    @Provides
+    public GithubSession providesGitHubSession(){
+        return new GithubSession(context);
     }
 
 }

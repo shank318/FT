@@ -6,6 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
 import code.github.networking.githubauth.GithubDialog.OAuthDialogListener;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -41,9 +44,9 @@ public class GithubApp {
 
 	private static final String TAG = "GitHubAPI";
 
-	public GithubApp(Context context, String clientId, String clientSecret,
+	public GithubApp(Context context, GithubSession mSession,String clientId, String clientSecret,
 			String callbackUrl) {
-		mSession = new GithubSession(context);
+		this.mSession = mSession;
 		mAccessToken = mSession.getAccessToken();
 		mCallbackUrl = callbackUrl;
 		mTokenUrl = TOKEN_URL + "client_id=" + clientId + "&client_secret="
@@ -69,9 +72,8 @@ public class GithubApp {
 	}
 
 	private void getAccessToken(final String code) {
-		mProgress.setMessage("Getting access token ...");
-		mProgress.show();
 
+		showDialog("Getting access token ...");
 		new Thread() {
 			@Override
 			public void run() {
@@ -90,9 +92,8 @@ public class GithubApp {
 					String response = streamToString(urlConnection
 							.getInputStream());
 					Log.i(TAG, "response " + response);
-					mAccessToken = response.substring(
-							response.indexOf("access_token=") + 13,
-							response.indexOf("&token_type"));
+					Map<String,String> map = getQueryMap(response);
+					mAccessToken = map.get("access_token");
 					Log.i(TAG, "Got access token: " + mAccessToken);
 				} catch (Exception ex) {
 					what = 1;
@@ -104,9 +105,25 @@ public class GithubApp {
 		}.start();
 	}
 
-	private void fetchUserName() {
-		mProgress.setMessage("Finalizing ...");
+	public static Map<String, String> getQueryMap(String query)
+	{
+		String[] params = query.split("&");
+		Map<String, String> map = new HashMap<>();
+		for (String param : params)
+		{
+			String[] queryParams = param.split("=");
+			if(queryParams.length==0) continue;
+			if(queryParams.length==2){
+				String name = param.split("=")[0];
+				String value = param.split("=")[1];
+				map.put(name, value);
+			}
+		}
+		return map;
+	}
 
+	private void fetchUserName() {
+		if(mProgress!=null)mProgress.setMessage("Finalizing ...");
 		new Thread() {
 			@Override
 			public void run() {
@@ -122,7 +139,6 @@ public class GithubApp {
 							.openConnection();
 					urlConnection.setRequestMethod("GET");
 					urlConnection.setDoInput(true);
-					urlConnection.setDoOutput(true);
 					urlConnection.connect();
 					String response = streamToString(urlConnection
 							.getInputStream());
@@ -151,15 +167,28 @@ public class GithubApp {
 				if (msg.what == 0) {
 					fetchUserName();
 				} else {
-					mProgress.dismiss();
+					hideDialog();
 					mListener.onFail("Failed to get access token");
 				}
 			} else {
-				mProgress.dismiss();
+				hideDialog();
 				mListener.onSuccess();
 			}
 		}
 	};
+
+	void showDialog(String message){
+		if(mProgress!=null){
+			mProgress.setMessage(message);
+			mProgress.show();
+		}
+	}
+
+	void hideDialog(){
+		if(mProgress!=null){
+			mProgress.dismiss();
+		}
+	}
 
 	public boolean hasAccessToken() {
 		return (mAccessToken == null) ? false : true;
@@ -174,7 +203,7 @@ public class GithubApp {
 	}
 
 	public void authorize() {
-		mDialog.show();
+		if(mDialog!=null) mDialog.show();
 	}
 
 	private String streamToString(InputStream is) throws IOException {
@@ -210,9 +239,16 @@ public class GithubApp {
 		}
 	}
 
-	public interface OAuthAuthenticationListener {
-		public abstract void onSuccess();
+	public void dismissDialog(){
+		mDialog.dismissDialog();
+		if(mProgress!=null && mProgress.isShowing()){
+			mProgress.dismiss();
+		}
+		mProgress=null;
+	}
 
-		public abstract void onFail(String error);
+	public interface OAuthAuthenticationListener {
+		void onSuccess();
+		void onFail(String error);
 	}
 }

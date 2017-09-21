@@ -2,66 +2,83 @@ package code.github.features.search;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import code.github.R;
 import code.github.base.BaseActivity;
+import code.github.base.MyApplication;
+import code.github.di.DaggerMainComponent;
 import code.github.di.MainComponent;
 import code.github.di.MainModule;
-import code.github.pojo.FilmLocation;
-import code.github.pojo.Item;
+import code.github.networking.githubauth.GithubSession;
+import code.github.pojo.Repository;
 import code.github.utils.Logger;
+import code.github.utils.SimpleItemDecorator;
 import code.github.utils.ViewUtil;
-
-import static java.security.AccessController.getContext;
 
 public class SearchActivity extends BaseActivity implements IUiView {
 
     @Inject
     Service service;
+    @BindView(R.id.empty_view)
+    View emptytView;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     ProgressDialog progressDialog;
     MainComponent component;
     Presenter presenter;
-    List<Item> searchItems;
+    List<Repository> searchRepositories = new ArrayList<Repository>();
+    SearchAdapter searchAdapter;
+    @BindView(R.id.searchbox)
+    EditText searchBox;
+    @BindView(R.id.snakbar)
+    CoordinatorLayout snackbarHolder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        GithubSession githubSession = MyApplication.getInstance().getGithubSession();
+        if(githubSession==null || githubSession.getAccessToken()==null) {
+            showLoginScreen();
+        }
         progressDialog = new ProgressDialog(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        getSupportActionBar().setTitle("GitHub: "+ githubSession.getUsername());
         initializeDependencies();
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        SearchAdapter searchAdapter = new SearchAdapter(getContext(),searchItems);
-//        recyclerView.addItemDecoration(
-//                new DividerItemDecoration(getCon));
+        searchAdapter = new SearchAdapter(this, searchRepositories);
+        recyclerView.addItemDecoration(new SimpleItemDecorator(16));
         recyclerView.setAdapter(searchAdapter);
     }
+
+    @OnClick(R.id.search_button)
+    protected void onSearch(View v){
+        if(searchBox.getText().toString().trim().length()>0){
+            presenter.search(searchBox.getText().toString());
+        }
+        ViewUtil.hideKeyboard(this);
+    }
+
+
 
 
     void initializeDependencies(){
@@ -78,6 +95,7 @@ public class SearchActivity extends BaseActivity implements IUiView {
             presenter = new Presenter(service);
         }
         presenter.attachView(this);
+        presenter.getUserRepositories();
     }
 
     @Override
@@ -104,12 +122,21 @@ public class SearchActivity extends BaseActivity implements IUiView {
 
     @Override
     public void showErrorMessage(Throwable throwable) {
-
+        showToast(throwable.getMessage());
     }
 
     @Override
-    public void onDataReceived(List<Item> searchItems) {
-
+    public void onDataReceived(List<Repository> repositories) {
+        if(repositories.size()==0) {
+            recyclerView.setVisibility(View.GONE);
+            emptytView.setVisibility(View.VISIBLE);
+        }else{
+            recyclerView.setVisibility(View.VISIBLE);
+            emptytView.setVisibility(View.GONE);
+        }
+        searchRepositories.clear();
+        searchRepositories.addAll(repositories);
+        if(searchAdapter!=null) searchAdapter.notifyDataSetChanged();
     }
     @Override
     public void showDialog() {
@@ -130,8 +157,15 @@ public class SearchActivity extends BaseActivity implements IUiView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Logger.debug("On destroy called");
         presenter.detachView();
         ViewUtil.hideDialog(progressDialog);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(searchAdapter!=null) searchAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -141,6 +175,12 @@ public class SearchActivity extends BaseActivity implements IUiView {
 
     @Override
     public void showNoInternetError(Throwable throwable) {
-        showToast(throwable.getMessage());
+        final Snackbar snackbar = Snackbar
+                .make(snackbarHolder, throwable.getMessage(), Snackbar.LENGTH_INDEFINITE)
+                .setAction(getString(R.string.try_again), view -> {
+                    presenter.getUserRepositories();
+                });
+
+        snackbar.show();
     }
 }
