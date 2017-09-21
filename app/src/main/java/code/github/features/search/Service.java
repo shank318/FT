@@ -72,7 +72,6 @@ public class Service {
             String jsonString = gson.toJson(
                     repositories,
                     new TypeToken<ArrayList<Repository>>() {}.getType());
-            Log.e("gw",jsonString+"");
             contactsJsonArray = new JSONArray(jsonString);
             realm.beginTransaction();
             realm.createOrUpdateAllFromJson(Repository.class, contactsJsonArray);

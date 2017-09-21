@@ -44,9 +44,9 @@ public class GithubApp {
 
 	private static final String TAG = "GitHubAPI";
 
-	public GithubApp(Context context, GithubSession mSession,String clientId, String clientSecret,
+	public GithubApp(Context context,String clientId, String clientSecret,
 			String callbackUrl) {
-		this.mSession = mSession;
+		mSession = new GithubSession(context);
 		mAccessToken = mSession.getAccessToken();
 		mCallbackUrl = callbackUrl;
 		mTokenUrl = TOKEN_URL + "client_id=" + clientId + "&client_secret="
@@ -72,9 +72,8 @@ public class GithubApp {
 	}
 
 	private void getAccessToken(final String code) {
-
 		showDialog("Getting access token ...");
-		new Thread() {
+		 new Thread() {
 			@Override
 			public void run() {
 				Log.i(TAG, "Getting access token");

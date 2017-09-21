@@ -66,7 +66,7 @@ public class SearchPresenterTest {
     @Test
     public void onLoadSuccessTest(){
         List<Repository> repositories = new ArrayList<>();
-        presenter.onSuccessUserRepos(repositories);
+        presenter.onSuccess(repositories);
         verify(presenter.getView()).hideDialog();
         verify(presenter.getView()).onDataReceived(repositories);
         verify(presenter.getView(), times(1)).hideDialog();
@@ -92,4 +92,6 @@ public class SearchPresenterTest {
         verify(presenter.getView()).showNoInternetError(exception);
         verify(presenter.getView(), times(1)).hideDialog();
     }
+
+
 }

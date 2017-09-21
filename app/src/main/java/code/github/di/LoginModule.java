@@ -22,7 +22,7 @@ public class LoginModule {
 
     @Provides
     public GithubApp providesGitHub(){
-        return new GithubApp(context, MyApplication.getInstance().getGithubSession(), Constants.CLIENT_ID,Constants.CLIENT_SECRET,Constants.CALLBACK_URL);
+        return new GithubApp(context, Constants.CLIENT_ID,Constants.CLIENT_SECRET,Constants.CALLBACK_URL);
     }
 
 }
