@@ -2,6 +2,8 @@ package code.boilerplate.base;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
+
 import code.boilerplate.constants.Constants;
 import code.boilerplate.di.ApiModule;
 import code.boilerplate.di.ApplicationComponent;
@@ -22,6 +24,7 @@ public class MyApplication extends Application {
         setUpDagger();
         initializeRealm();
         mInstance = this;
+        Stetho.initializeWithDefaults(this);
     }
 
     void setUpDagger(){

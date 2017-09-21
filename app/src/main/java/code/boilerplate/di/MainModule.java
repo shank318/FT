@@ -19,7 +19,7 @@ public class MainModule {
     }
 
     @Provides
-    public GetDataApi providesService(Retrofit retrofit){
+    public GetDataApi providesApi(Retrofit retrofit){
         return retrofit.create(GetDataApi.class);
     }
 }
