@@ -1,6 +1,6 @@
 
 
-### Architecture:-
+### Android Clean Architecture:-
 
 1. The App follows MVP pattern using Dagger2 as dependency injection and RXJava(for async calls).
 2. "feature" folder contains all the features of the app.
