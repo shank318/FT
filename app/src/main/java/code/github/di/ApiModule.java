@@ -35,11 +35,13 @@ public class ApiModule {
         this.context = context;
     }
 
+    @Singleton
     @Provides
     public Gson providesGson(){
         return new Gson();
     }
 
+    @Singleton
     @Provides
     public Retrofit providesRetrofit(){
         OkHttpClient client = new OkHttpClient.Builder()
@@ -54,6 +56,7 @@ public class ApiModule {
                 .build();
     }
 
+    @Singleton
     @Provides
     public GithubSession providesGitHubSession(){
         return new GithubSession(context);
