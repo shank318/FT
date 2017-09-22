@@ -2,7 +2,7 @@
 
 ### Android Clean Architecture:-
 
-1. The App follows clean MVP pattern.
+1. The App follows MVP pattern.
 2. Dagger2 as dependency injection with custom scoping.
 3. RXJava and Lambda
 4. "feature" folder contains all the features of the app.
