@@ -9,6 +9,7 @@
 
 ### How it works:-
 
+1. Login with Github
 1. The app will fetch the github repos of logged in user and cache the data in Realm database.
 2. Search is provided for searching public repositories.
 
