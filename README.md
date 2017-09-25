@@ -1,3 +1,5 @@
+### Problem:-
+Create an app which lets you login through GITHUB and show user repos in a list. Also, provide a search functionality to search public repositories.
 
 
 ### Android Clean Architecture:-
