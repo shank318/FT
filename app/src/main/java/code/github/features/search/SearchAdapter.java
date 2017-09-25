@@ -55,6 +55,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
+
+
+    @Override
     public void onBindViewHolder(ViewHolder holder, int position){
         Repository repository = searchRepositories.get(position);
         holder.title.setText(repository.getName());

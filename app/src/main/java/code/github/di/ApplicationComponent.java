@@ -1,5 +1,7 @@
 package code.github.di;
 
+import com.google.gson.Gson;
+
 import javax.inject.Singleton;
 
 import code.github.base.MyApplication;

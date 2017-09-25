@@ -34,12 +34,7 @@ public class Presenter extends BasePresenter<IUiView> {
             addSubscription(service.fetchSearchData(query)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.computation())
-                    .flatMap(new Func1<SearchResult, Observable<List<Repository>>>() {
-                        @Override
-                        public Observable<List<Repository>> call(SearchResult searchResult) {
-                            return Observable.just(searchResult.getRepositories());
-                        }
-                    })
+                    .flatMap(searchResult-> Observable.just(searchResult.getRepositories()))
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::onSuccess, this::onLoadFailure));
 

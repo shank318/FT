@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +34,13 @@ import code.github.pojo.Repository;
 import code.github.utils.Logger;
 import code.github.utils.SimpleItemDecorator;
 import code.github.utils.ViewUtil;
+import retrofit2.Retrofit;
 
 public class SearchActivity extends BaseActivity implements IUiView {
 
     @Inject
     Service service;
+
     @BindView(R.id.empty_view)
     View emptytView;
     @BindView(R.id.recycler_view)
