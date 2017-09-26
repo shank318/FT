@@ -35,9 +35,6 @@ public class LoginActivity extends BaseActivity implements ILoginView  {
         component.inject(this);
         loginPresenter = new LoginPresenter(app);
         loginPresenter.attachView(this);
-        if (loginPresenter.isUserLoggedIn()) {
-            startSearchActivity();
-        }
     }
 
     @OnClick(R.id.login)
@@ -48,6 +45,7 @@ public class LoginActivity extends BaseActivity implements ILoginView  {
     void startSearchActivity(){
         Intent i = new Intent(this, SearchActivity.class);
         startActivity(i);
+        finish();
     }
 
 

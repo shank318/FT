@@ -65,9 +65,14 @@ public class SearchActivity extends BaseActivity implements IUiView {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initializeDependencies();
+
+        // Check if user is logged in
         if(githubSession==null || githubSession.getAccessToken()==null) {
             showLoginScreen();
+            return;
         }
+
+        initializePresenter();
         progressDialog = new ProgressDialog(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("GitHub: "+ githubSession.getUsername());
@@ -88,13 +93,16 @@ public class SearchActivity extends BaseActivity implements IUiView {
 
 
 
+
     void initializeDependencies(){
         // injection
         component = DaggerMainComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .mainModule(new MainModule()).build();
         component.inject(this);
+    }
 
+    void initializePresenter(){
         // presenter
         presenter = (Presenter) getLastCustomNonConfigurationInstance();
         Logger.debug("Presenter: "+presenter);
@@ -165,7 +173,7 @@ public class SearchActivity extends BaseActivity implements IUiView {
     protected void onDestroy() {
         super.onDestroy();
         Logger.debug("On destroy called");
-        presenter.detachView();
+        if(!isNull(presenter)) presenter.detachView();
         ViewUtil.hideDialog(progressDialog);
     }
 
