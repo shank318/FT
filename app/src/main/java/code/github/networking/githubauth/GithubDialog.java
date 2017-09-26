@@ -122,9 +122,8 @@ public class GithubDialog extends Dialog {
 		@Override
 		public void onPageStarted(WebView view, String url, Bitmap favicon) {
 			Log.d(TAG, "Loading URL: " + url);
-
 			super.onPageStarted(view, url, favicon);
-			mSpinner.show();
+			if(mSpinner!=null )mSpinner.show();
 		}
 
 		@Override
@@ -134,7 +133,7 @@ public class GithubDialog extends Dialog {
 			if (title != null && title.length() > 0) {
 				mTitle.setText(title);
 			}
-			mSpinner.dismiss();
+			if(mSpinner!=null )mSpinner.dismiss();
 		}
 
 	}
@@ -146,11 +145,14 @@ public class GithubDialog extends Dialog {
 		 void onError(String error);
 	}
 
+
 	@Override
 	public void onDetachedFromWindow() {
 		super.onDetachedFromWindow();
+		GithubDialog.this.dismiss();
 		if(mSpinner!=null && mSpinner.isShowing()){
 			mSpinner.dismiss();
 		}
+		mSpinner= null;
 	}
 }
