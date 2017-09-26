@@ -52,7 +52,7 @@ public class LoginActivity extends BaseActivity implements ILoginView  {
     @Override
     protected void onPause() {
         super.onPause();
-       loginPresenter.dismissDialog();
+        app.dismissDialog();
     }
 
     @Override

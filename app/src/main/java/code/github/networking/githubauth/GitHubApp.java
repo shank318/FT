@@ -163,7 +163,6 @@ public class GitHubApp {
 	public void dismissDialog(){
 		context = null;
 		subscriptions.clear();
-		mDialog.dismissDialog();
 		if(mProgress!=null && mProgress.isShowing()){
 			mProgress.dismiss();
 		}

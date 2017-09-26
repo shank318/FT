@@ -52,7 +52,6 @@ public class GithubDialog extends Dialog {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		mSpinner = new ProgressDialog(getContext());
 		mSpinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		mSpinner.setMessage("Loading...");
@@ -125,7 +124,7 @@ public class GithubDialog extends Dialog {
 			Log.d(TAG, "Loading URL: " + url);
 
 			super.onPageStarted(view, url, favicon);
-			if(mSpinner!=null)mSpinner.show();
+			mSpinner.show();
 		}
 
 		@Override
@@ -135,23 +134,23 @@ public class GithubDialog extends Dialog {
 			if (title != null && title.length() > 0) {
 				mTitle.setText(title);
 			}
-			if(mSpinner!=null)mSpinner.dismiss();
-		}
-
-	}
-
-
-	public void dismissDialog() {
-		GithubDialog.this.dismiss();
-		if(mSpinner!=null && mSpinner.isShowing()){
 			mSpinner.dismiss();
 		}
-		mSpinner=null;
+
 	}
+
+
 
 	public interface OAuthDialogListener {
 		 void onComplete(String accessToken);
 		 void onError(String error);
 	}
 
+	@Override
+	public void onDetachedFromWindow() {
+		super.onDetachedFromWindow();
+		if(mSpinner!=null && mSpinner.isShowing()){
+			mSpinner.dismiss();
+		}
+	}
 }

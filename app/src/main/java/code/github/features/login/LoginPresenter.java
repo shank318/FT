@@ -29,9 +29,6 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
         gitHubApp.authorize();
     }
 
-    public void dismissDialog(){
-        gitHubApp.dismissDialog();
-    }
 
     private GitHubApp.OAuthAuthenticationListener listener = new GitHubApp.OAuthAuthenticationListener() {
 
