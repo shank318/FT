@@ -22,9 +22,6 @@ Create an app which lets you login through GITHUB and show user repos in a list.
 1. I am using Realm database for caching the data to avoid downloading the user repos every time user ope. 
 2. In search only top 10 results will be shown sorted by no of stars.
 
-### TODO:-
-
-There is no official SDK/library for GitHub Authentication in Android. I have found some code for Github auth and customised some parts( folder name - githubauth). The code can be improved. 
 
 ### TESTING:-
 
