@@ -48,6 +48,8 @@ public class SearchActivity extends BaseActivity implements IUiView {
     View emptytView;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     ProgressDialog progressDialog;
     MainComponent component;
     Presenter presenter;
@@ -67,7 +69,6 @@ public class SearchActivity extends BaseActivity implements IUiView {
             showLoginScreen();
         }
         progressDialog = new ProgressDialog(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("GitHub: "+ githubSession.getUsername());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

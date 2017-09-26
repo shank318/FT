@@ -3,6 +3,7 @@ package code.github.networking.githubauth;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.Context;
+import android.util.Log;
 
 /**
  * Created by shank on 9/21/17.

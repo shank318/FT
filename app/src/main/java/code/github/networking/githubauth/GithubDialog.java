@@ -38,13 +38,13 @@ public class GithubDialog extends Dialog {
 	private WebView mWebView;
 	private LinearLayout mContent;
 	private TextView mTitle;
-
+	private String mCallbackUrl;
 	private static final String TAG = "GitHub-WebView";
 
 	public GithubDialog(Context context, String url,
-			OAuthDialogListener listener) {
+			OAuthDialogListener listener, String callbackUrl) {
 		super(context);
-
+		mCallbackUrl = callbackUrl;
 		mUrl = url;
 		mListener = listener;
 	}
@@ -101,8 +101,7 @@ public class GithubDialog extends Dialog {
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
 			Log.d(TAG, "Redirecting URL " + url);
-
-			if (url.startsWith(GitHubApp.mCallbackUrl)) {
+			if (url.startsWith(mCallbackUrl)) {
 				String urls[] = url.split("=");
 				mListener.onComplete(urls[1]);
 				GithubDialog.this.dismiss();

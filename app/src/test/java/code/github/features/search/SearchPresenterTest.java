@@ -1,5 +1,7 @@
 package code.github.features.search;
 
+import android.util.Log;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -11,9 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import code.github.RxSchedulersOverrideRule;
+import code.github.networking.githubauth.GitHubApp;
 import code.github.pojo.Repository;
 import code.github.networking.ConnectivityInterceptor;
 import code.github.pojo.SearchResult;
+import code.github.utils.Logger;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 import rx.schedulers.TestScheduler;
@@ -31,6 +35,7 @@ public class SearchPresenterTest {
     Presenter presenter;
     @Mock
     Service mockedRepository;
+
     @Mock
     IUiView mockedView;
 

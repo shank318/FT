@@ -8,6 +8,7 @@ import code.github.pojo.Repository;
 import code.github.pojo.SearchResult;
 import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
+import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -19,5 +20,6 @@ public interface GitHubAPI {
     Observable<SearchResult> getSearchData(@QueryMap Map<String,String> map);
 
     @GET("user/repos")
-    Observable<List<Repository>> getUserReops(@QueryMap Map<String,String> map);
+    Observable<List<Repository>> getUserReops( @QueryMap Map<String,String> map);
+
 }

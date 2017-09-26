@@ -1,5 +1,7 @@
 package code.github.di;
 
+import android.util.Log;
+
 import code.github.features.search.Service;
 import code.github.networking.GitHubAPI;
 import code.github.networking.githubauth.GithubSession;

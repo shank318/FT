@@ -51,7 +51,7 @@ public class Presenter extends BasePresenter<IUiView> {
     }
 
     public void getUserRepositories() {
-        // Show dialoge only if there is no cache
+        // Show dialog only if there is no cache
         if(service.checkIfRepoExists()){
             getViewOrThrow().onDataReceived(service.readAllReopsFromRealm());
         }else{

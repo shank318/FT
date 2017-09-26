@@ -24,7 +24,6 @@ public class MyApplication extends Application {
 
     ApplicationComponent component;
     private static MyApplication mInstance;
-
     @Inject
     GithubSession githubSession;
 
