@@ -15,6 +15,7 @@ import java.util.Map;
 
 import code.github.base.MyApplication;
 import code.github.networking.GitHubAPI;
+import code.github.networking.githubauth.GithubSession;
 import code.github.pojo.Repository;
 import code.github.pojo.SearchResult;
 import code.github.utils.GsonUtil;
@@ -31,8 +32,10 @@ import rx.Observable;
 public class Service {
 
     GitHubAPI searchDataApi;
-    public Service(GitHubAPI searchDataApi) {
+    GithubSession session;
+    public Service(GitHubAPI searchDataApi, GithubSession session) {
         this.searchDataApi = searchDataApi;
+        this.session = session;
     }
 
     private Service(){
@@ -44,13 +47,13 @@ public class Service {
         map.put("sort","stars");
         map.put("order","desc");
         map.put("per_page","10");
-        map.put("access_token", MyApplication.getInstance().getGithubSession().getAccessToken());
+        map.put("access_token", session.getAccessToken());
         return searchDataApi.getSearchData(map);
     }
 
     public Observable<List<Repository>> fetchUserRepos() {
         Map<String,String> map = new HashMap<>();
-        map.put("access_token", MyApplication.getInstance().getGithubSession().getAccessToken());
+        map.put("access_token", session.getAccessToken());
         return searchDataApi.getUserReops(map);
     }
 

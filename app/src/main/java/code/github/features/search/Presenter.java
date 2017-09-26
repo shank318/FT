@@ -12,6 +12,7 @@ import code.github.pojo.Repository;
 import code.github.pojo.SearchResult;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 

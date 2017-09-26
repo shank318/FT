@@ -18,4 +18,5 @@ import retrofit2.Retrofit;
 public interface ApplicationComponent {
     void inject(MyApplication application);
     Retrofit getRetrofit();
+    GithubSession getGitHubSession();
 }

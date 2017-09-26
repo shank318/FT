@@ -60,7 +60,4 @@ public class MyApplication extends Application {
         return component;
     }
 
-    public GithubSession getGithubSession(){
-        return githubSession;
-    }
 }

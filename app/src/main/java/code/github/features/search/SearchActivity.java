@@ -41,6 +41,9 @@ public class SearchActivity extends BaseActivity implements IUiView {
     @Inject
     Service service;
 
+    @Inject
+    GithubSession githubSession;
+
     @BindView(R.id.empty_view)
     View emptytView;
     @BindView(R.id.recycler_view)
@@ -59,7 +62,7 @@ public class SearchActivity extends BaseActivity implements IUiView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        GithubSession githubSession = MyApplication.getInstance().getGithubSession();
+        initializeDependencies();
         if(githubSession==null || githubSession.getAccessToken()==null) {
             showLoginScreen();
         }
@@ -67,7 +70,6 @@ public class SearchActivity extends BaseActivity implements IUiView {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("GitHub: "+ githubSession.getUsername());
-        initializeDependencies();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         searchAdapter = new SearchAdapter(this, searchRepositories);
         recyclerView.addItemDecoration(new SimpleItemDecorator(16));
