@@ -51,7 +51,7 @@ public class GitHubApp {
 
 	@Inject
 	GitHubService service;
-
+	private Context context;
 	private GithubDialog mDialog;
 	private OAuthAuthenticationListener mListener;
 	private ProgressDialog mProgress;
@@ -60,7 +60,7 @@ public class GitHubApp {
 	Map<String,String> map = new HashMap<>();
 	private static final String TAG = "GitHubAPI";
 
-	public void buildComponent(Context context){
+	public void buildComponent(){
 		AppComponent component = DaggerAppComponent.builder()
 				.appModule(new AppModule(Constant.API_URL,context))
 				.build();
@@ -70,7 +70,8 @@ public class GitHubApp {
 
 	public GitHubApp(Context context, String clientId, String clientSecret,
                      String callbackUrl) {
-		buildComponent(context);
+		this.context = context;
+		buildComponent();
 
 		// Build Map
 		map.put("client_id",clientId);
@@ -160,6 +161,7 @@ public class GitHubApp {
 	}
 
 	public void dismissDialog(){
+		context = null;
 		subscriptions.clear();
 		mDialog.dismissDialog();
 		if(mProgress!=null && mProgress.isShowing()){
