@@ -1,11 +1,15 @@
+### Problem:-
+Create an app which lets you login through GITHUB and show user repos in a list. Also, provide a search functionality to search public repositories.
 
 
 ### Android Clean Architecture:-
 
-1. The App follows MVP pattern using Dagger2 as dependency injection and RXJava(for async calls).
-2. "feature" folder contains all the features of the app.
-3. Every feature will have a View, Presenter, and Service where the presenter will talk to service to fetch data from Github APIs and pass it to the view via the interface.
-4. Dagger2 is been used to provide Service as a dependency to Presenter.
+1. The App follows MVP pattern.
+2. Dagger2 as dependency injection.
+3. RXJava and retrolambda.
+4. "feature" folder contains all the features of the app.
+5. Every feature will have a View, Presenter, and Service where the presenter will talk to service to fetch data from Github    APIs and pass it to the view via the interface.
+
 
 ### How it works:-
 
